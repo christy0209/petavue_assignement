@@ -1,0 +1,602 @@
+[
+  {
+      "query": "Get all orders where the discount applied is greater than 10%.",
+      "retrieved_context": "To filter rows where a column meets a condition, use `df[df['column'] > value]`.",
+      "generated_code": "result=df[df['Discount Applied'] > 10]"
+  },
+  {
+      "query": "Calculate the total revenue generated from all orders.",
+      "retrieved_context": "Revenue can be calculated by summing up the 'Total Order Value' column.",
+      "generated_code": "result=df['Total Order Value'].sum()"
+  },
+  {
+      "query": "Find the number of unique customers.",
+      "retrieved_context": "Use `.nunique()` to count the number of unique values in a column.",
+      "generated_code": "result=df['Customer ID'].nunique()"
+  },
+  {
+      "query": "Get all orders placed by customer ID 'C12345'.",
+      "retrieved_context": "Use boolean indexing to filter rows where 'Customer ID' matches the given value.",
+      "generated_code": "result=df[df['Customer ID'] == 'C12345']"
+  },
+  {
+      "query": "Calculate the average order value.",
+      "retrieved_context": "Use `.mean()` on the 'Total Order Value' column.",
+      "generated_code": "result=df['Total Order Value'].mean()"
+  },
+  {
+      "query": "Get the total number of products ordered per category.",
+      "retrieved_context": "Use `.groupby()` with `.sum()` to aggregate data by category.",
+      "generated_code": "result=df.groupby('Product Category')['Quantity Ordered'].sum().reset_index()"
+  },
+  {
+      "query": "Find the most popular product category.",
+      "retrieved_context": "Use `.groupby()` to sum quantities per category and `.idxmax()` to find the most ordered one.",
+      "generated_code": "result=df.groupby('Product Category')['Quantity Ordered'].sum().idxmax()"
+  },
+  {
+      "query": "List all orders that were returned.",
+      "retrieved_context": "Filter rows where 'Return Status' is marked as 'Returned'.",
+      "generated_code": "result=df[df['Return Status'] == 'Returned']"
+  },
+  {
+      "query": "Calculate the time taken for each order to be delivered.",
+      "retrieved_context": "Convert date columns to datetime and subtract 'Order Date' from 'Shipping Date'.",
+      "generated_code": "df['Delivery Time'] = (pd.to_datetime(df['Shipping Date']) - pd.to_datetime(df['Order Date'])).dt.days"
+  },
+  {
+      "query": "Find the average discount given per product category.",
+      "retrieved_context": "Use `.groupby()` with `.mean()` to compute the average discount per category.",
+      "generated_code": "result=df.groupby('Product Category')['Discount Applied'].mean().reset_index()"
+  },
+  {
+      "query": "Get the number of orders per payment method.",
+      "retrieved_context": "Use `.value_counts()` to count occurrences of unique values in a column.",
+      "generated_code": "result=df['Payment Method'].value_counts()"
+  },
+  {
+      "query": "Find the highest revenue-generating product category.",
+      "retrieved_context": "Use `.groupby()` and `.sum()` to find total order values per category.",
+      "generated_code": "result=df.groupby('Product Category')['Total Order Value'].sum().idxmax()"
+  },
+  {
+      "query": "Get a list of all unique shipment partners.",
+      "retrieved_context": "Use `.unique()` to get unique values in a column.",
+      "generated_code": "result=df['Shipment Partner'].unique()"
+  },
+  {
+      "query": "Find the average age of customers who returned their orders.",
+      "retrieved_context": "Filter rows where 'Return Status' is 'Returned' and then compute the mean of 'Customer Age'.",
+      "generated_code": "result=df[df['Return Status'] == 'Returned']['Customer Age'].mean()"
+  },
+  {
+      "query": "Get the top 5 customers who spent the most.",
+      "retrieved_context": "Use `.groupby()` and `.sum()` to calculate total spending per customer, then sort and take the top 5.",
+      "generated_code": "result=df.groupby('Customer ID')['Total Order Value'].sum().nlargest(5).reset_index()"
+  },
+  {
+      "query": "Get all orders that were delivered late.",
+      "retrieved_context": "Compare 'Shipping Date' and 'Order Date' to check for delays.",
+      "generated_code": "result=df[pd.to_datetime(df['Shipping Date']) > pd.to_datetime(df['Order Date'])]"
+  },
+  {
+      "query": "Calculate the percentage of orders delivered successfully.",
+      "retrieved_context": "Find the ratio of successful deliveries to total orders and multiply by 100.",
+      "generated_code": "result=(df['Delivery Status'] == 'Delivered').mean() * 100"
+  },
+  {
+      "query": "Get all orders where the discounted price is less than 50.",
+      "retrieved_context": "Filter rows based on the 'Discounted Price' column.",
+      "generated_code": "result=df[df['Discounted Price'] < 50]"
+  },
+  {
+      "query": "Find the gender distribution of customers.",
+      "retrieved_context": "Use `.value_counts()` to count occurrences of each gender.",
+      "generated_code": "result=df['Customer Gender'].value_counts()"
+  },
+  {
+      "query": "Get the average quantity ordered for each warehouse.",
+      "retrieved_context": "Use `.groupby()` with `.mean()` to compute average quantity per warehouse.",
+      "generated_code": "result=df.groupby('Warehouse ID')['Quantity Ordered'].mean().reset_index()"
+  },
+  {
+      "query": "List all orders sorted by Order Date in ascending order.",
+      "retrieved_context": "Sort the DataFrame by 'Order Date' using sort_values.",
+      "generated_code": "result = df.sort_values('Order Date', ascending=True)"
+  },
+  {
+      "query": "List all orders sorted by Order Date in descending order.",
+      "retrieved_context": "Sort the DataFrame by 'Order Date' in descending order.",
+      "generated_code": "result = df.sort_values('Order Date', ascending=False)"
+  },
+  {
+      "query": "Count the total number of orders in the dataset.",
+      "retrieved_context": "Use the shape attribute to get the number of rows.",
+      "generated_code": "result = df.shape[0]"
+  },
+  {
+      "query": "Calculate the average price of products.",
+      "retrieved_context": "Use the mean() function on the 'Price' column.",
+      "generated_code": "result = df['Price'].mean()"
+  },
+  {
+      "query": "Filter orders with Payment Method 'Credit Card'.",
+      "retrieved_context": "Use boolean indexing to filter rows with 'Credit Card' as the Payment Method.",
+      "generated_code": "result = df[df['Payment Method'] == 'Credit Card']"
+  },
+  {
+      "query": "Find orders where Quantity Ordered is greater than 5.",
+      "retrieved_context": "Filter rows where 'Quantity Ordered' is greater than 5.",
+      "generated_code": "result = df[df['Quantity Ordered'] > 5]"
+  },
+  {
+      "query": "Calculate the total discount amount across all orders.",
+      "retrieved_context": "Sum the 'Discount Applied' column to get the total discount.",
+      "generated_code": "result = df['Discount Applied'].sum()"
+  },
+  {
+      "query": "Get all orders for product category 'Electronics'.",
+      "retrieved_context": "Filter rows where 'Product Category' is 'Electronics'.",
+      "generated_code": "result = df[df['Product Category'] == 'Electronics']"
+  },
+  {
+      "query": "Compute the average price per product category.",
+      "retrieved_context": "Group by 'Product Category' and compute the mean of 'Price'.",
+      "generated_code": "result = df.groupby('Product Category')['Price'].mean().reset_index()"
+  },
+  {
+      "query": "Find the maximum price per product category.",
+      "retrieved_context": "Group by 'Product Category' and compute the maximum of 'Price'.",
+      "generated_code": "result = df.groupby('Product Category')['Price'].max().reset_index()"
+  },
+  {
+      "query": "Find the minimum price per product category.",
+      "retrieved_context": "Group by 'Product Category' and compute the minimum of 'Price'.",
+      "generated_code": "result = df.groupby('Product Category')['Price'].min().reset_index()"
+  },
+  {
+      "query": "Identify orders with missing Shipping Date.",
+      "retrieved_context": "Filter rows where 'Shipping Date' is null.",
+      "generated_code": "result = df[df['Shipping Date'].isnull()]"
+  },
+  {
+      "query": "Find orders with Order Date in 2021.",
+      "retrieved_context": "Convert 'Order Date' to datetime and filter rows with year equal to 2021.",
+      "generated_code": "df['Order Date'] = pd.to_datetime(df['Order Date'])\nresult = df[df['Order Date'].dt.year == 2021]"
+  },
+  {
+      "query": "Calculate the total quantity ordered for each product.",
+      "retrieved_context": "Group by 'Product ID' and sum the 'Quantity Ordered' column.",
+      "generated_code": "result = df.groupby('Product ID')['Quantity Ordered'].sum().reset_index()"
+  },
+  {
+      "query": "List all orders shipped by 'FedEx'.",
+      "retrieved_context": "Filter rows where 'Shipment Partner' is 'FedEx'.",
+      "generated_code": "result = df[df['Shipment Partner'] == 'FedEx']"
+  },
+  {
+      "query": "Get orders with Delivery Status 'In Transit'.",
+      "retrieved_context": "Filter rows where 'Delivery Status' is 'In Transit'.",
+      "generated_code": "result = df[df['Delivery Status'] == 'In Transit']"
+  },
+  {
+      "query": "Calculate the average customer age.",
+      "retrieved_context": "Use the mean() function on the 'Customer Age' column.",
+      "generated_code": "result = df['Customer Age'].mean()"
+  },
+  {
+      "query": "Find orders where Customer Age is above 50.",
+      "retrieved_context": "Filter rows where 'Customer Age' is greater than 50.",
+      "generated_code": "result = df[df['Customer Age'] > 50]"
+  },
+  {
+      "query": "Get orders from Customer Location 'New York'.",
+      "retrieved_context": "Filter rows where 'Customer Location' is 'New York'.",
+      "generated_code": "result = df[df['Customer Location'] == 'New York']"
+  },
+  {
+      "query": "Count the number of orders per Customer Location.",
+      "retrieved_context": "Use value_counts() on the 'Customer Location' column.",
+      "generated_code": "result = df['Customer Location'].value_counts()"
+  },
+  {
+      "query": "Find orders with Price above 100.",
+      "retrieved_context": "Filter rows where 'Price' is greater than 100.",
+      "generated_code": "result = df[df['Price'] > 100]"
+  },
+  {
+      "query": "Calculate total revenue per Payment Method.",
+      "retrieved_context": "Group by 'Payment Method' and sum the 'Total Order Value'.",
+      "generated_code": "result = df.groupby('Payment Method')['Total Order Value'].sum().reset_index()"
+  },
+  {
+      "query": "Identify orders with Return Status 'Not Returned'.",
+      "retrieved_context": "Filter rows where 'Return Status' is 'Not Returned'.",
+      "generated_code": "result = df[df['Return Status'] == 'Not Returned']"
+  },
+  {
+      "query": "List orders where Discounted Price is not equal to Price minus Discount Applied.",
+      "retrieved_context": "Compare 'Discounted Price' with the computed value of 'Price' minus 'Discount Applied'.",
+      "generated_code": "result = df[df['Discounted Price'] != (df['Price'] - df['Discount Applied'])]"
+  },
+  {
+      "query": "Extract month from Order Date and add it as a new column.",
+      "retrieved_context": "Convert 'Order Date' to datetime and extract the month.",
+      "generated_code": "result = df.assign(Order_Month = pd.to_datetime(df['Order Date']).dt.month)"
+  },
+  {
+      "query": "Calculate average Total Order Value per month.",
+      "retrieved_context": "Extract the month from 'Order Date', group by it, and compute the mean of 'Total Order Value'.",
+      "generated_code": "df['Order_Month'] = pd.to_datetime(df['Order Date']).dt.month\nresult = df.groupby('Order_Month')['Total Order Value'].mean().reset_index()"
+  },
+  {
+      "query": "List orders delivered on the same day as shipping.",
+      "retrieved_context": "Filter orders where 'Order Date' equals 'Shipping Date'.",
+      "generated_code": "df['Order Date'] = pd.to_datetime(df['Order Date'])\ndf['Shipping Date'] = pd.to_datetime(df['Shipping Date'])\nresult = df[df['Order Date'] == df['Shipping Date']]"
+  },
+  {
+      "query": "Find the earliest Order Date in the dataset.",
+      "retrieved_context": "Use the min() function on the 'Order Date' column.",
+      "generated_code": "result = df['Order Date'].min()"
+  },
+  {
+      "query": "Find the latest Shipping Date in the dataset.",
+      "retrieved_context": "Use the max() function on the 'Shipping Date' column.",
+      "generated_code": "result = df['Shipping Date'].max()"
+  },
+  {
+      "query": "Calculate the total number of orders per Warehouse ID.",
+      "retrieved_context": "Use value_counts() on the 'Warehouse ID' column.",
+      "generated_code": "result = df['Warehouse ID'].value_counts()"
+  },
+  {
+      "query": "List all unique Product IDs.",
+      "retrieved_context": "Use the unique() function on the 'Product ID' column.",
+      "generated_code": "result = df['Product ID'].unique()"
+  },
+  {
+      "query": "Find orders with Quantity Ordered equal to 1.",
+      "retrieved_context": "Filter rows where 'Quantity Ordered' equals 1.",
+      "generated_code": "result = df[df['Quantity Ordered'] == 1]"
+  },
+  {
+      "query": "Calculate the sum of Price for orders with any discount applied.",
+      "retrieved_context": "Filter orders with a discount and sum the 'Price' column.",
+      "generated_code": "result = df[df['Discount Applied'] > 0]['Price'].sum()"
+  },
+  {
+      "query": "Find orders with Payment Method 'PayPal'.",
+      "retrieved_context": "Filter rows where 'Payment Method' is 'PayPal'.",
+      "generated_code": "result = df[df['Payment Method'] == 'PayPal']"
+  },
+  {
+      "query": "Calculate the average Discounted Price overall.",
+      "retrieved_context": "Use the mean() function on the 'Discounted Price' column.",
+      "generated_code": "result = df['Discounted Price'].mean()"
+  },
+  {
+      "query": "List orders where the Customer Gender is 'Female'.",
+      "retrieved_context": "Filter rows where 'Customer Gender' equals 'Female'.",
+      "generated_code": "result = df[df['Customer Gender'] == 'Female']"
+  },
+  {
+      "query": "Count the number of orders where the Customer Gender is 'Male'.",
+      "retrieved_context": "Filter and count rows where 'Customer Gender' equals 'Male'.",
+      "generated_code": "result = df[df['Customer Gender'] == 'Male'].shape[0]"
+  },
+  {
+      "query": "Get orders from customers older than 40.",
+      "retrieved_context": "Filter rows where 'Customer Age' is greater than 40.",
+      "generated_code": "result = df[df['Customer Age'] > 40]"
+  },
+  {
+      "query": "Get orders from customers younger than 25.",
+      "retrieved_context": "Filter rows where 'Customer Age' is less than 25.",
+      "generated_code": "result = df[df['Customer Age'] < 25]"
+  },
+  {
+      "query": "Calculate total revenue for orders with no discount applied.",
+      "retrieved_context": "Filter orders where 'Discount Applied' is 0 and sum 'Total Order Value'.",
+      "generated_code": "result = df[df['Discount Applied'] == 0]['Total Order Value'].sum()"
+  },
+  {
+      "query": "List orders with a Discount Applied of exactly 5.",
+      "retrieved_context": "Filter rows where 'Discount Applied' equals 5.",
+      "generated_code": "result = df[df['Discount Applied'] == 5]"
+  },
+  {
+      "query": "Get orders with Order ID starting with 'ORD'.",
+      "retrieved_context": "Use string methods to filter 'Order ID' that start with 'ORD'.",
+      "generated_code": "result = df[df['Order ID'].str.startswith('ORD')]"
+  },
+  {
+      "query": "Find the most common Product ID ordered.",
+      "retrieved_context": "Use the mode() function on the 'Product ID' column.",
+      "generated_code": "result = df['Product ID'].mode()[0]"
+  },
+  {
+      "query": "Calculate the total quantity ordered for product category 'Clothing'.",
+      "retrieved_context": "Filter by 'Product Category' and sum the 'Quantity Ordered'.",
+      "generated_code": "result = df[df['Product Category'] == 'Clothing']['Quantity Ordered'].sum()"
+  },
+  {
+      "query": "List orders where Shipping Date is before Order Date.",
+      "retrieved_context": "Convert date columns and filter orders where Shipping Date precedes Order Date.",
+      "generated_code": "df['Order Date'] = pd.to_datetime(df['Order Date'])\ndf['Shipping Date'] = pd.to_datetime(df['Shipping Date'])\nresult = df[df['Shipping Date'] < df['Order Date']]"
+  },
+  {
+      "query": "Identify orders with missing Payment Method.",
+      "retrieved_context": "Filter rows where 'Payment Method' is null.",
+      "generated_code": "result = df[df['Payment Method'].isnull()]"
+  },
+  {
+      "query": "Calculate average Total Order Value for orders delivered on time.",
+      "retrieved_context": "Filter rows with 'Delivery Status' as 'Delivered' and compute the mean of 'Total Order Value'.",
+      "generated_code": "result = df[df['Delivery Status'] == 'Delivered']['Total Order Value'].mean()"
+  },
+  {
+      "query": "List orders where Customer Age is between 30 and 40.",
+      "retrieved_context": "Filter rows where 'Customer Age' is between 30 and 40.",
+      "generated_code": "result = df[(df['Customer Age'] >= 30) & (df['Customer Age'] <= 40)]"
+  },
+  {
+      "query": "Count the number of orders for each Product Category.",
+      "retrieved_context": "Use value_counts() on the 'Product Category' column.",
+      "generated_code": "result = df['Product Category'].value_counts()"
+  },
+  {
+      "query": "Find the order with the highest Total Order Value.",
+      "retrieved_context": "Use idxmax() on 'Total Order Value' to get the highest order.",
+      "generated_code": "result = df.loc[df['Total Order Value'].idxmax()]"
+  },
+  {
+      "query": "Find the order with the lowest Total Order Value.",
+      "retrieved_context": "Use idxmin() on 'Total Order Value' to get the lowest order.",
+      "generated_code": "result = df.loc[df['Total Order Value'].idxmin()]"
+  },
+  {
+      "query": "List orders with a Shipping Date in the future.",
+      "retrieved_context": "Compare 'Shipping Date' to the current date to find future dates.",
+      "generated_code": "import datetime\nresult = df[pd.to_datetime(df['Shipping Date']) > datetime.datetime.now()]"
+  },
+  {
+      "query": "Get orders with Customer Location 'California'.",
+      "retrieved_context": "Filter rows where 'Customer Location' equals 'California'.",
+      "generated_code": "result = df[df['Customer Location'] == 'California']"
+  },
+  {
+      "query": "Count orders by Shipment Partner.",
+      "retrieved_context": "Use value_counts() on the 'Shipment Partner' column.",
+      "generated_code": "result = df['Shipment Partner'].value_counts()"
+  },
+  {
+      "query": "Calculate average Discount Applied for orders paid using 'Debit Card'.",
+      "retrieved_context": "Filter by 'Payment Method' and compute the mean of 'Discount Applied'.",
+      "generated_code": "result = df[df['Payment Method'] == 'Debit Card']['Discount Applied'].mean()"
+  },
+  {
+      "query": "List orders where Product Category is either 'Electronics' or 'Clothing'.",
+      "retrieved_context": "Use isin() to filter rows with multiple categories.",
+      "generated_code": "result = df[df['Product Category'].isin(['Electronics', 'Clothing'])]"
+  },
+  {
+      "query": "Find the number of orders for each Shipment Partner.",
+      "retrieved_context": "Group by 'Shipment Partner' and count the orders.",
+      "generated_code": "result = df.groupby('Shipment Partner').size().reset_index(name='Order Count')"
+  },
+  {
+      "query": "Calculate total revenue per Product Category.",
+      "retrieved_context": "Group by 'Product Category' and sum the 'Total Order Value'.",
+      "generated_code": "result = df.groupby('Product Category')['Total Order Value'].sum().reset_index()"
+  },
+  {
+      "query": "Find orders with a Total Order Value above 500.",
+      "retrieved_context": "Filter rows where 'Total Order Value' is greater than 500.",
+      "generated_code": "result = df[df['Total Order Value'] > 500]"
+  },
+  {
+      "query": "List orders that were returned and have a Discount Applied greater than 0.",
+      "retrieved_context": "Filter rows where 'Return Status' is 'Returned' and 'Discount Applied' > 0.",
+      "generated_code": "result = df[(df['Return Status'] == 'Returned') & (df['Discount Applied'] > 0)]"
+  },
+  {
+      "query": "Get orders with a Quantity Ordered of zero.",
+      "retrieved_context": "Filter rows where 'Quantity Ordered' equals 0.",
+      "generated_code": "result = df[df['Quantity Ordered'] == 0]"
+  },
+  {
+      "query": "Calculate the average Quantity Ordered for product category 'Furniture'.",
+      "retrieved_context": "Filter by 'Product Category' and compute the mean of 'Quantity Ordered'.",
+      "generated_code": "result = df[df['Product Category'] == 'Furniture']['Quantity Ordered'].mean()"
+  },
+  {
+      "query": "List orders placed in the first quarter of the year.",
+      "retrieved_context": "Extract month from 'Order Date' and filter for months 1, 2, and 3.",
+      "generated_code": "df['Order_Month'] = pd.to_datetime(df['Order Date']).dt.month\nresult = df[df['Order_Month'].isin([1, 2, 3])]"
+  },
+  {
+      "query": "Calculate the total revenue from orders placed in December.",
+      "retrieved_context": "Extract the month and sum 'Total Order Value' for month 12.",
+      "generated_code": "df['Order_Month'] = pd.to_datetime(df['Order Date']).dt.month\nresult = df[df['Order_Month'] == 12]['Total Order Value'].sum()"
+  },
+  {
+      "query": "Find orders where Shipping Date is earlier than Order Date.",
+      "retrieved_context": "Convert date columns and filter where Shipping Date is less than Order Date.",
+      "generated_code": "df['Order Date'] = pd.to_datetime(df['Order Date'])\ndf['Shipping Date'] = pd.to_datetime(df['Shipping Date'])\nresult = df[df['Shipping Date'] < df['Order Date']]"
+  },
+  {
+      "query": "Get unique values for Customer Gender.",
+      "retrieved_context": "Use unique() on the 'Customer Gender' column.",
+      "generated_code": "result = df['Customer Gender'].unique()"
+  },
+  {
+      "query": "List orders where Price is below 20.",
+      "retrieved_context": "Filter rows where 'Price' is less than 20.",
+      "generated_code": "result = df[df['Price'] < 20]"
+  },
+  {
+      "query": "Calculate the average Price for orders with more than 2 items.",
+      "retrieved_context": "Filter rows with 'Quantity Ordered' > 2 and compute the mean of 'Price'.",
+      "generated_code": "result = df[df['Quantity Ordered'] > 2]['Price'].mean()"
+  },
+  {
+      "query": "Find orders with Total Order Value equal to zero.",
+      "retrieved_context": "Filter rows where 'Total Order Value' equals 0.",
+      "generated_code": "result = df[df['Total Order Value'] == 0]"
+  },
+  {
+      "query": "Calculate the median of Total Order Value.",
+      "retrieved_context": "Use the median() function on the 'Total Order Value' column.",
+      "generated_code": "result = df['Total Order Value'].median()"
+  },
+  {
+      "query": "List orders sorted by Customer Age in descending order.",
+      "retrieved_context": "Sort the DataFrame by 'Customer Age' in descending order.",
+      "generated_code": "result = df.sort_values('Customer Age', ascending=False)"
+  },
+  {
+      "query": "Count the number of orders with a non-null Shipping Date.",
+      "retrieved_context": "Filter rows with non-null 'Shipping Date' and count them.",
+      "generated_code": "result = df[df['Shipping Date'].notnull()].shape[0]"
+  },
+  {
+      "query": "Calculate total Discount Applied for product category 'Accessories'.",
+      "retrieved_context": "Filter rows by 'Product Category' and sum 'Discount Applied'.",
+      "generated_code": "result = df[df['Product Category'] == 'Accessories']['Discount Applied'].sum()"
+  },
+  {
+      "query": "Find orders with Customer Location containing 'City'.",
+      "retrieved_context": "Use str.contains() to filter 'Customer Location' that contain 'City'.",
+      "generated_code": "result = df[df['Customer Location'].str.contains('City', na=False)]"
+  },
+  {
+      "query": "List orders with Customer ID ending in '99'.",
+      "retrieved_context": "Use str.endswith() to filter 'Customer ID' that end with '99'.",
+      "generated_code": "result = df[df['Customer ID'].str.endswith('99')]"
+  },
+  {
+      "query": "Calculate average Total Order Value for orders paid with 'Cash'.",
+      "retrieved_context": "Filter by 'Payment Method' and compute the mean of 'Total Order Value'.",
+      "generated_code": "result = df[df['Payment Method'] == 'Cash']['Total Order Value'].mean()"
+  },
+  {
+      "query": "Find orders where Order Date and Shipping Date are the same.",
+      "retrieved_context": "Convert dates and filter rows where they are equal.",
+      "generated_code": "df['Order Date'] = pd.to_datetime(df['Order Date'])\ndf['Shipping Date'] = pd.to_datetime(df['Shipping Date'])\nresult = df[df['Order Date'] == df['Shipping Date']]"
+  },
+  {
+      "query": "List orders with Quantity Ordered between 2 and 10.",
+      "retrieved_context": "Filter rows where 'Quantity Ordered' is between 2 and 10.",
+      "generated_code": "result = df[(df['Quantity Ordered'] >= 2) & (df['Quantity Ordered'] <= 10)]"
+  },
+  {
+      "query": "Count the number of orders for each Payment Method.",
+      "retrieved_context": "Use value_counts() on the 'Payment Method' column.",
+      "generated_code": "result = df['Payment Method'].value_counts()"
+  },
+  {
+      "query": "Calculate total revenue for orders placed by customers older than 60.",
+      "retrieved_context": "Filter rows by 'Customer Age' and sum 'Total Order Value'.",
+      "generated_code": "result = df[df['Customer Age'] > 60]['Total Order Value'].sum()"
+  },
+  {
+      "query": "List orders with Discounted Price equal to zero.",
+      "retrieved_context": "Filter rows where 'Discounted Price' equals 0.",
+      "generated_code": "result = df[df['Discounted Price'] == 0]"
+  },
+  {
+      "query": "Find the order with the highest Price.",
+      "retrieved_context": "Use idxmax() on 'Price' to get the order with the highest price.",
+      "generated_code": "result = df.loc[df['Price'].idxmax()]"
+  },
+  {
+      "query": "Find the order with the lowest Price.",
+      "retrieved_context": "Use idxmin() on 'Price' to get the order with the lowest price.",
+      "generated_code": "result = df.loc[df['Price'].idxmin()]"
+  },
+  {
+      "query": "List orders with a Product ID that starts with 'P'.",
+      "retrieved_context": "Use str.startswith() on 'Product ID' to filter rows.",
+      "generated_code": "result = df[df['Product ID'].str.startswith('P')]"
+  },
+  {
+      "query": "Calculate the total number of orders for each Customer Gender.",
+      "retrieved_context": "Use value_counts() on the 'Customer Gender' column.",
+      "generated_code": "result = df['Customer Gender'].value_counts()"
+  },
+  {
+      "query": "Find orders where Total Order Value is within 10% of the average order value.",
+      "retrieved_context": "Calculate the average and filter rows within ±10% of it.",
+      "generated_code": "avg_val = df['Total Order Value'].mean()\nresult = df[(df['Total Order Value'] >= 0.9 * avg_val) & (df['Total Order Value'] <= 1.1 * avg_val)]"
+  },
+  {
+      "query": "List orders where the Order ID is duplicated.",
+      "retrieved_context": "Use duplicated() to find orders with duplicate 'Order ID'.",
+      "generated_code": "result = df[df['Order ID'].duplicated(keep=False)]"
+  },
+  {
+      "query": "Calculate the total revenue from orders with Payment Method 'Credit Card'.",
+      "retrieved_context": "Filter by 'Payment Method' and sum 'Total Order Value'.",
+      "generated_code": "result = df[df['Payment Method'] == 'Credit Card']['Total Order Value'].sum()"
+  },
+  {
+      "query": "Find orders where Product Category is null.",
+      "retrieved_context": "Filter rows where 'Product Category' is null.",
+      "generated_code": "result = df[df['Product Category'].isnull()]"
+  },
+  {
+      "query": "List orders with Discount Applied greater than the average discount applied.",
+      "retrieved_context": "Compute the average discount and filter rows above it.",
+      "generated_code": "avg_discount = df['Discount Applied'].mean()\nresult = df[df['Discount Applied'] > avg_discount]"
+  },
+  {
+      "query": "Calculate the average Customer Age for each Customer Location.",
+      "retrieved_context": "Group by 'Customer Location' and compute the mean of 'Customer Age'.",
+      "generated_code": "result = df.groupby('Customer Location')['Customer Age'].mean().reset_index()"
+  },
+  {
+      "query": "Find orders with Total Order Value less than the median value.",
+      "retrieved_context": "Compute the median and filter rows with lower Total Order Value.",
+      "generated_code": "median_val = df['Total Order Value'].median()\nresult = df[df['Total Order Value'] < median_val]"
+  },
+  {
+      "query": "List orders where Customer Location is not 'Texas'.",
+      "retrieved_context": "Filter rows where 'Customer Location' is not equal to 'Texas'.",
+      "generated_code": "result = df[df['Customer Location'] != 'Texas']"
+  },
+  {
+      "query": "Calculate the average Quantity Ordered for orders with any discount applied.",
+      "retrieved_context": "Filter rows with a discount and compute the mean of 'Quantity Ordered'.",
+      "generated_code": "result = df[df['Discount Applied'] > 0]['Quantity Ordered'].mean()"
+  },
+  {
+      "query": "Find the most frequently used Payment Method.",
+      "retrieved_context": "Use mode() on the 'Payment Method' column.",
+      "generated_code": "result = df['Payment Method'].mode()[0]"
+  },
+  {
+      "query": "List orders where Order Date is missing.",
+      "retrieved_context": "Filter rows where 'Order Date' is null.",
+      "generated_code": "result = df[df['Order Date'].isnull()]"
+  },
+  {
+      "query": "Calculate the sum of Price for orders delivered on time.",
+      "retrieved_context": "Filter rows with 'Delivery Status' as 'Delivered' and sum the 'Price' column.",
+      "generated_code": "result = df[df['Delivery Status'] == 'Delivered']['Price'].sum()"
+  },
+  {
+      "query": "Find orders with a non-null Shipping Date.",
+      "retrieved_context": "Filter rows where 'Shipping Date' is not null.",
+      "generated_code": "result = df[df['Shipping Date'].notnull()]"
+  },
+  {
+      "query": "List orders sorted by Customer Location and then by Order Date.",
+      "retrieved_context": "Sort by multiple columns using sort_values.",
+      "generated_code": "result = df.sort_values(['Customer Location', 'Order Date'])"
+  },
+  {
+      "query": "Calculate total revenue generated per Warehouse ID.",
+      "retrieved_context": "Group by 'Warehouse ID' and sum the 'Total Order Value'.",
+      "generated_code": "result = df.groupby('Warehouse ID')['Total Order Value'].sum().reset_index()"
+  }
+]
