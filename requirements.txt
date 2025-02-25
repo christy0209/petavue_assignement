@@ -1,0 +1,10 @@
+fastapi==0.95.2
+huggingface_hub==0.13.3
+numpy==1.23.5
+openpyxl==3.1.2
+pandas==1.5.3
+python-multipart==0.0.5
+scikit-learn==1.2.2
+torch==1.13.1
+transformers==4.26.0
+uvicorn[standard]==0.22.0
