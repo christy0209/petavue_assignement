@@ -218,16 +218,17 @@ def LLM_GROQ(new_query, df,file_path):
                   
           # Initialize a local execution environment with 'df' as the DataFrame.
           local_vars = {"df": df}
-          pandas_query = f"""import pandas as pd\nimport numpy as np\n{pandas_query}
-          """
-          print(pandas_query)  
-
+          pandas_query = f"""import pandas as pd\nimport numpy as np\n{pandas_query}"""
           # Execute the extracted code safely.
           exec(pandas_query, {}, local_vars)
         try:
             # Convert DataFrame to JSON string with 'records' orientation.
             if "result" in local_vars:
-                json_result = local_vars['result'].to_json(orient='records')
+                if isinstance(local_vars['result'], dict):
+                    json_result = local_vars['result'].to_json(orient='records')
+                else:
+                    output = {'result':local_vars['result']}
+                    json_result = json.dumps(output)
             else:
                 local_vars['df'].to_csv(file_path)
                 json_result = {"Dataframe succcesfully updated!"}
