@@ -2,8 +2,9 @@
 import json
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from huggingface_hub import login
+from groq import Groq
+from dotenv import load_dotenv
+import os
 
  
 # Open and read the JSON file
@@ -11,7 +12,6 @@ json_file_path = 'data/small_rag.json'
 with open(json_file_path, 'r') as file:
     rag_examples = json.load(file)
 
-login(token="Token Enter here")
 
 def retrieve_context(new_query, top_k=3):
     """
@@ -113,30 +113,36 @@ def build_prompt(new_query, retrieved_examples, data):
         "You are a helpful assistant that generates Python pandas code based on a natural language query.\n"
         "Below are some examples:\n\n"
     )
-    
+
     # Append each retrieved example to the prompt.
     for ex in retrieved_examples:
         # Check if each expected key exists in the example.
         if not all(key in ex for key in ['query', 'retrieved_context', 'generated_code']):
             raise ValueError("Each example in retrieved_examples must contain 'query', 'retrieved_context', and 'generated_code' keys.")
-        
+
         prompt += f"Query: {ex['query']}\n"
         prompt += f"Context: {ex['retrieved_context']}\n"
         prompt += f"Code: {ex['generated_code']}\n\n"
 
     prompt += "End of examples\n\n"
-    
+
     # Append the new query.
     prompt += f"\n\nNew Query: {new_query}\n"
-    
+
     # Append instructions for generating the Python pandas code.
-    prompt += "Generate the Python pandas code for ."
-    prompt += " Generate only the most relevant python pandas code, nothing more\n"
-    
+    prompt += "Generate the Python pandas code and return as a json ."
+
+    prompt += "If the query is for creating a new column do it inplacef\n"
+    prompt += "Include the datatype changes in the code as required"
+
     # Append the data's column information.
     prompt += f"The data consist of the following columns {data.columns.tolist()}"
 
+    prompt += "If the task involves creating or modifying columns (for example, calculating new values), modify the existing DataFrame by adding the new columns directly to it."
+
+    prompt +="\n For any other operations (such as filtering, aggregations, merging, etc.), assign the output to a variable named result."
     return prompt
+
 
 
 def extract_insight(generated_text, data):
@@ -282,6 +288,101 @@ def LLM(new_query, df, rag_examples):
         except Exception as e:
             print("Error converting DataFrame to JSON:", e)
 
+        return json_result
+
+    except Exception as e:
+        raise Exception(f"An error occurred in the LLM function: {str(e)}")
+
+def chat_with_groq(client, prompt, model, response_format):
+  completion = client.chat.completions.create(
+  model=model,
+  messages=[
+      {
+          "role": "user",
+          "content": prompt
+      }
+  ],
+  response_format=response_format
+  )
+
+  return completion.choices[0].message.content
+
+def LLM_GROQ(new_query, df,file_path):
+    """
+    Generate insights using a large language model with retrieval-augmented examples.
+
+    This function leverages an LLM (specifically the Mistral-7B model) to generate Python pandas code based on a natural language query.
+    It retrieves similar examples from a provided list of RAG examples, constructs a prompt that includes these examples and data details,
+    generates the code using the model, executes the generated code on the provided DataFrame, and returns the resulting insight.
+
+    Parameters:
+        new_query (str): The natural language query to generate the pandas code.
+        df (pandas.DataFrame): The DataFrame on which the generated code will operate.
+        rag_examples (list): A list of dictionaries, each containing keys 'query', 'retrieved_context', and 'generated_code'.
+
+    Returns:
+        object: The result obtained from executing the generated code on the DataFrame.
+
+    Raises:
+        ValueError: If new_query is not a non-empty string.
+        ValueError: If df is not a pandas DataFrame.
+        ValueError: If rag_examples is not a non-empty list.
+        Exception: If an error occurs during model loading, prompt construction, code generation, or code execution.
+    """
+    try:
+        # Validate inputs.
+        if not isinstance(new_query, str) or not new_query.strip():
+            raise ValueError("new_query must be a non-empty string.")
+
+        try:
+            import pandas as pd
+        except ImportError:
+            raise ImportError("pandas is required for this function.")
+
+        if not isinstance(df, pd.DataFrame):
+            raise ValueError("df must be a pandas DataFrame.")
+        if not isinstance(rag_examples, list) or not rag_examples:
+            raise ValueError("rag_examples must be a non-empty list.")
+
+        # Retrieve similar examples from rag_examples using the new_query.
+        # (Assuming retrieve_context is defined to use the global rag_examples or has been updated accordingly.)
+        retrieved_examples = retrieve_context(new_query)
+
+        # Build the prompt using the retrieved examples, the new query, and data details.
+        prompt = build_prompt(new_query, retrieved_examples, df)
+        # Use the Llama3 70b model
+        model = "llama3-70b-8192"
+        # Get the Groq API key and create a Groq client
+        #groq_api_key = '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'
+        # Load variables from .env file
+        load_dotenv(".env")
+        groq_api_key = os.getenv("groq_api_key")
+        client = Groq(
+          api_key=groq_api_key
+        )
+        # Get the AI's response. Call with '{"type": "json_object"}' to use JSON mode
+        llm_response = chat_with_groq(client, prompt, model, {"type": "json_object"})
+        result_json = json.loads(llm_response)
+        if 'code' in result_json:
+          pandas_query = result_json['code']
+                  
+          # Initialize a local execution environment with 'df' as the DataFrame.
+          local_vars = {"df": df}
+          pandas_query = f"""import pandas as pd\nimport numpy as np\n{pandas_query}
+          """
+          print(pandas_query)  
+
+          # Execute the extracted code safely.
+          exec(pandas_query, {}, local_vars)
+        try:
+            # Convert DataFrame to JSON string with 'records' orientation.
+            if "result" in local_vars:
+                json_result = local_vars['result'].to_json(orient='records')
+            else:
+                local_vars['df'].to_csv(file_path)
+                json_result = {"Dataframe succcesfully updated!"}
+        except Exception as e:
+            print("Error converting DataFrame to JSON:", e)
         return json_result
 
     except Exception as e:

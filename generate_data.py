@@ -38,4 +38,4 @@ def generate_synthetic_data(rows=10000):
 if __name__ == "__main__":
     data = generate_synthetic_data(1000)
 
-    data.to_excel("data/transactions.xlsx")
+    data.to_csv("data/transactions.csv")
