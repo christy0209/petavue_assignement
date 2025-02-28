@@ -16,6 +16,7 @@ A command line application that allows users to ask questions about their CSV da
 ## Usage
 
 * You must store a valid Groq API Key as a secret to proceed with this example.
+* Update the Key in .env file
 * run it on the command line with 
 ```bash
 run uvicorn main:app --reload --host 0.0.0.0 --port 8000
